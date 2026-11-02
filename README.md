@@ -14,6 +14,7 @@ A showcase app for trying different Hyprland shells. Built with Quickshell.
 ## Installation
 
 ```bash
+git clone https://github.com/lachaise97420/WorldOfShells.git
 bash install.sh
 ```
 
