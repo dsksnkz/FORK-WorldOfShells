@@ -1,5 +1,14 @@
 # World of Shells
 
+![Preview](preview.png)
+
+
+## Disclaimer
+
+**This project is highly experimental.** I am not a developer — just someone in their room with a PC and internet access. This app is a showcase/vitrine for trying different Hyprland shells. Activating a shell may modify your system configuration. Always ensure you have backups of your Hyprland and Quickshell configs before trying a shell. I am not responsible for any damage to your system configuration.
+
+Some shells (like end-4) perform full dotfiles installations that may overwrite your existing configuration. Use at your own risk.
+
 A showcase app for trying different Hyprland shells. Built with Quickshell.
 
 ## Installation
