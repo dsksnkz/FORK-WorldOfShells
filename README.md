@@ -57,3 +57,9 @@ Or find "World of Shells" in your app launcher.
 
 ## License
 MIT
+
+## Disclaimer
+
+**This project is highly experimental.** It is a showcase/vitrine application for trying different Hyprland shells. Activating a shell may modify your system configuration. Always ensure you have backups of your Hyprland and Quickshell configs before trying a shell. The authors are not responsible for any damage to your system configuration.
+
+Some shells (like end-4) perform full dotfiles installations that may overwrite your existing configuration. Use at your own risk.

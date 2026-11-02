@@ -34,8 +34,43 @@ ShellRoot {
         property int animMed: 200
         property int animSlow: 280
 
+        property string colorsPath: (Quickshell.env("XDG_CACHE_HOME") || (Quickshell.env("HOME") + "/.cache")) + "/ryoku/colors.json"
+
+        function applyColors(c) {
+            if (!c || typeof c !== "object") return
+            function usable(v) { return typeof v === "string" && v.length > 0 }
+            if (usable(c.background)) bg = c.background
+            if (usable(c.surface)) surface = c.surface
+            if (usable(c.surfaceContainerHigh)) surfaceHigh = c.surfaceContainerHigh
+            if (usable(c.onSurface)) fg = c.onSurface
+            if (usable(c.onSurfaceVariant)) fgVariant = c.onSurfaceVariant
+            if (usable(c.outline)) fgMuted = c.outline
+            if (usable(c.onPrimary)) fgOnPrimary = c.onPrimary
+            if (usable(c.primary)) primary = c.primary
+            if (usable(c.tertiary)) tertiary = c.tertiary
+            if (usable(c.outline)) outline = c.outline
+            if (usable(c.outlineVariant)) outlineVariant = c.outlineVariant
+        }
     }
 
+    FileView {
+        id: colorsFile
+        path: tok.colorsPath
+        blockLoading: true
+        watchChanges: true
+        printErrors: false
+        onFileChanged: reload()
+        onLoaded: {
+            try {
+                const t = colorsFile.text()
+                const c = t && t.length ? JSON.parse(t) : null
+                if (c) tok.applyColors(c)
+            } catch (e) {}
+        }
+        Component.onCompleted: {
+            try { reload() } catch (e) {}
+        }
+    }
 
     property var shells: [
         {
@@ -349,7 +384,7 @@ ShellRoot {
             icon: "\u2726",
             badge: "ÉTAPE 1 SUR 7  •  INTRODUCTION",
             title: "Bienvenue dans World of Shells",
-            desc: "Explorez et essayez facilement 14 environnements Quickshell pour Hyprland en un clic, sans compromettre votre configuration actuelle.",
+            desc: "Explorez et essayez facilement 14 environnements Quickshell pour Hyprland en un clic, sans compromettre votre configuration principale Ryoku.",
             hint: "Utilisez les boutons Suivant / Précédent ou les flèches du clavier pour parcourir ce guide."
         },
         {
@@ -370,14 +405,14 @@ ShellRoot {
             icon: "\u25B6",
             badge: "ÉTAPE 4 SUR 7  •  TEST EN DIRECT",
             title: "Activer un shell",
-            desc: "Cliquez sur le bouton « Activer » en bas à droite pour tester immédiatement le shell sélectionné. Votre shell actuel est mis en pause proprement pendant que le nouveau shell se lance.",
+            desc: "Cliquez sur le bouton « Activer » en bas à droite pour tester immédiatement le shell sélectionné. Ryoku est mis en pause proprement pendant que le nouveau shell se lance.",
             hint: "Pour end-4 (dotfiles complets), une fenêtre de confirmation s'affiche avant toute installation."
         },
         {
             icon: "\u21BA",
             badge: "ÉTAPE 5 SUR 7  •  RESTAURATION",
-            title: "Revenir à votre shell",
-            desc: "À tout moment, cliquez sur le bouton « ↺ Revenir » situé en bas du panneau gauche pour arrêter le shell en cours d'essai et restaurer votre environnement.",
+            title: "Revenir à Ryoku",
+            desc: "À tout moment, cliquez sur le bouton « ↺ Revenir à Ryoku » situé en bas du panneau gauche pour arrêter le shell en cours d'essai et restaurer instantanément votre environnement Ryoku.",
             hint: "L'indicateur d'état juste au-dessus du bouton vous confirme chaque opération."
         },
         {
@@ -500,7 +535,7 @@ ShellRoot {
             interval: 800
             onTriggered: {
                 win.busy = false
-                win.statusText = "Shell précédent restauré."
+                win.statusText = "Retour à Ryoku effectué."
             }
         }
 
@@ -515,7 +550,7 @@ ShellRoot {
         function confirmEnd4Activate() {
             win.confirmEnd4 = false
             win.busy = true
-            win.statusText = "Sauvegarde + lancement de l'installateur end-4..."
+            win.statusText = "Sauvegarde de Ryoku + lancement de l'installateur end-4..."
             Quickshell.execDetached(["bash", win.shell.activateScript])
             actTimer.restart()
         }
@@ -526,7 +561,7 @@ ShellRoot {
         function revert() {
             if (win.busy || !win.shell.revertScript) return
             win.busy = true
-            win.statusText = "Restauration..."
+            win.statusText = "Restauration de Ryoku..."
             Quickshell.execDetached(["bash", win.shell.revertScript])
             revTimer.restart()
         }
@@ -979,7 +1014,7 @@ ShellRoot {
                         }
                     }
 
-                    // Revert Button
+                    // Revert to Ryoku Button
                     Rectangle {
                         id: revBtn
                         Layout.fillWidth: true
@@ -997,7 +1032,7 @@ ShellRoot {
 
                         Text {
                             anchors.centerIn: parent
-                            text: win.busy ? "Opération en cours..." : "\u21BA  Revenir"
+                            text: win.busy ? "Opération en cours..." : "\u21BA  Revenir à Ryoku"
                             font.pixelSize: 12
                             font.weight: Font.Medium
                             color: win.busy ? tok.fgMuted : tok.fg
@@ -1066,6 +1101,17 @@ ShellRoot {
                                 font.pixelSize: 12
                                 color: tok.tertiary
                             }
+
+                    // Disclaimer
+                    Text {
+                        text: "Projet experimental. L'activation d'un shell peut modifier votre configuration. Assurez-vous d'avoir des sauvegardes."
+                        font.pixelSize: 10
+                        color: tok.fgMuted
+                        wrapMode: Text.Wrap
+                        Layout.fillWidth: true
+                        font.italic: true
+                    }
+                }
                             Text {
                                 text: "Vidéo de démonstration"
                                 font.pixelSize: 11
@@ -1603,7 +1649,7 @@ ShellRoot {
                     }
 
                     Text {
-                        text: "end-4 (illogical-impulse) est un ensemble complet de dotfiles qui remplacera votre configuration Hyprland et Quickshell. Une sauvegarde de votre configuration actuelle sera créée automatiquement avant l'installation."
+                        text: "end-4 (illogical-impulse) est un ensemble complet de dotfiles qui remplacera votre configuration Hyprland et Quickshell. Une sauvegarde complète de Ryoku sera créée automatiquement avant l'installation."
                         font.pixelSize: 13
                         color: tok.fgVariant
                         wrapMode: Text.Wrap
@@ -2161,4 +2207,3 @@ ShellRoot {
             }
         }
     }
-}
