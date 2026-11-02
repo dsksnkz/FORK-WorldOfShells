@@ -1,0 +1,10 @@
+# Logs
+*.log
+/tmp/opencode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Cache
+.cache/

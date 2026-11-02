@@ -1,0 +1,59 @@
+# World of Shells
+
+A showcase app for trying different Hyprland shells. Built with Quickshell.
+
+## Installation
+
+```bash
+bash install.sh
+```
+
+Or manually:
+```bash
+cp -r WorldOfShells-standalone ~/.config/quickshell/WorldOfShells
+chmod +x ~/.config/quickshell/WorldOfShells/*.sh
+```
+
+## Usage
+
+```bash
+qs -c WorldOfShells
+```
+
+Or find "World of Shells" in your app launcher.
+
+## Shells included (14)
+
+| Shell | Stars | License | Activation |
+|-------|-------|---------|------------|
+| MacShell | 328 | MIT | Start qs -c MacShell |
+| end-4 (illogical-impulse) | 16.5k | GPL-3.0 | Full dotfiles install (confirmation required) |
+| DankMaterialShell (DMS) | 8.7k | MIT | Start dms run |
+| Nucleus Shell | 721 | GPL-3.0 | Start qs -c nucleus-shell |
+| Nandoroid | 179 | AGPL-3.0 | Start qs -c nandoroid |
+| SekaiPop | 526 | GPL-3.0 | Start qs -c sekaipop |
+| Twinshell | 5 | GPL-3.0 | Start qs -c twinshell |
+| QSDots | 5 | MIT | Start qs -c qsdots |
+| Asaki Shell | 0 | Unknown | Start qs -c asaki |
+| MaterialUI | 0 | MIT | Start qs -c materialui |
+| Vantage | 24 | MIT | Start qs -c vantage |
+| Ukishima | 119 | MIT | Start qs -c ukishima |
+| Lucid | 322 | MIT | Start qs -c lucid |
+| Nothingshell | 26 | MIT | Start qs -c nothingshell |
+
+## Features
+- Browse 14 shells with screenshots
+- Click "Activer" to try a shell (stops current, starts new one)
+- Click "Revenir" to restore your previous shell
+- Image lightbox with zoom/pan
+- Matugen-friendly (reads colors from ~/.cache/ryoku/colors.json if available)
+- Settings button (placeholder)
+
+## Requirements
+- Hyprland 0.55+
+- Quickshell 0.3.0+
+- Qt 6.5+
+- qsb (qt6-shadertools)
+
+## License
+MIT
